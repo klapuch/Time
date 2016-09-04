@@ -8,25 +8,25 @@ namespace Klapuch\Time;
 final class LimitedInterval implements Interval {
     const FROM = 0;
     const TO = 1;
-	private $origin;
-	private $range;
+    private $origin;
+    private $range;
 
-	public function __construct(Interval $origin, array $range) {
-		$this->origin = $origin;
-		$this->range = $range;
-	}
+    public function __construct(Interval $origin, array $range) {
+        $this->origin = $origin;
+        $this->range = $range;
+    }
 
     public function current(): \DateTimeInterface {
         return $this->onAllowedRange(function() {
             return $this->origin->current();
         });
-	}
+    }
 
     public function next(): Interval {
         return $this->onAllowedRange(function() {
             return $this->origin->next();
         });
-	}
+    }
 
     public function step(): int {
         return $this->onAllowedRange(function() {
@@ -34,12 +34,12 @@ final class LimitedInterval implements Interval {
         });
     }
 
-   /**
-    * On allowed range call the event
-    * @param \closure $event
-    * @return int|DateTimeInterface
-    * @throws \RuntimeException
-    */ 
+    /**
+     * On allowed range call the event
+     * @param \closure $event
+     * @return int|DateTimeInterface
+     * @throws \RuntimeException
+     */ 
     private function onAllowedRange(\closure $event) {
         if($this->underflowed()) {
             throw new \UnderflowException(

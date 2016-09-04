@@ -7,28 +7,28 @@ namespace Klapuch\Time;
  * Past intervals are not allowed
  */
 final class FutureInterval implements Interval {
-	private $origin;
+    private $origin;
 
-	public function __construct(Interval $origin) {
-		$this->origin = $origin;
-	}
+    public function __construct(Interval $origin) {
+        $this->origin = $origin;
+    }
 
     public function current(): \DateTimeInterface {
         if($this->comparison($this->origin->current(), new \DateTime()) === 1)
-			return $this->origin->current();
-		throw new \OutOfRangeException('Start interval must points to the future');
-	}
+            return $this->origin->current();
+        throw new \OutOfRangeException('Start interval must points to the future');
+    }
 
     public function next(): Interval {
         if($this->comparison($this->origin->next()->current(), $this->current()) === 1)
-			return $this->origin->next();
-		throw new \OutOfRangeException('Next step must points to the future');
-	}
-
-	public function step(): int {
-		return $this->origin->step();
+            return $this->origin->next();
+        throw new \OutOfRangeException('Next step must points to the future');
     }
-    
+
+    public function step(): int {
+        return $this->origin->step();
+    }
+
     /**
      * Compare two datetimes
      * @param \DateTimeInterface $left
@@ -39,6 +39,6 @@ final class FutureInterval implements Interval {
         \DateTimeInterface $left,
         \DateTimeInterface $right
     ) {
-       return $left <=> $right; 
+        return $left <=> $right; 
     }
 }
