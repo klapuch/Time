@@ -30,7 +30,7 @@ final class DateTimeInterval implements Interval {
     }
 
     public function step(): int {
-        if($this->transferable($this->step))
+        if($this->convertable($this->step))
             return $this->toSeconds($this->step);
         throw new \OutOfRangeException(
             'Months or years can not be precisely transferred'
@@ -38,7 +38,7 @@ final class DateTimeInterval implements Interval {
     }
 
     /**
-     * Transferred step to the seconds
+     * Converted step to the seconds
      * @param \DateInterval $step
      * @return int
      */
@@ -50,12 +50,12 @@ final class DateTimeInterval implements Interval {
     }
 
     /**
-     * Can be the step precisely transferred to the seconds?
+     * Can be the step precisely converted to the seconds?
      * Years and months differs and can not be precisely calculated
      * @param \DateInterval $step
      * @return bool
      */
-    private function transferable(\DateInterval $step): bool {
+    private function convertable(\DateInterval $step): bool {
         return $step->m === 0 && $step->y === 0;
     }
 }
