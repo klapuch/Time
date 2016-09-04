@@ -52,6 +52,7 @@ final class DateTimeInterval implements Interval {
     /**
      * Can be the step precisely converted to the seconds?
      * Years and months differs and can not be precisely calculated
+     * They don't have fixed converted constant
      * @param \DateInterval $step
      * @return bool
      */
