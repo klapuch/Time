@@ -32,6 +32,17 @@ final class DateTimeInterval extends Tester\TestCase {
         );
     }
 
+    public function testIsoInSeconds() {
+        Assert::equal(
+            'PT120S',
+            (new Time\DateTimeInterval(
+                new \DateTimeImmutable('2000-01-01 01:01:01'),
+                new \DateInterval('PT2M')
+            ))->iso()
+        );
+
+    }
+
     protected function allowedSteps() {
         $negativeInterval = new \DateInterval('PT4M');
         $negativeInterval->invert = 1;
@@ -84,7 +95,6 @@ final class DateTimeInterval extends Tester\TestCase {
             'Months or years can not be precisely transferred'
         );
     }
-
 }
 
 (new DateTimeInterval())->run();

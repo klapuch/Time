@@ -34,6 +34,12 @@ final class LimitedInterval implements Interval {
         });
     }
 
+    public function iso(): string {
+        return $this->onAllowedRange(function() {
+            return $this->origin->iso();
+        });
+    }
+
     /**
      * On allowed range call the event
      * @param \closure $event
@@ -98,7 +104,7 @@ final class LimitedInterval implements Interval {
 
 
     /**
-     * Ascending ordered range
+     * Ordered range in ascend direction
      * FROM will be always minimum
      * TO will be always maximum
      * @return array

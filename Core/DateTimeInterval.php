@@ -37,6 +37,10 @@ final class DateTimeInterval implements Interval {
         );
     }
 
+    public function iso(): string {
+        return sprintf('PT%dS', $this->step());
+    }
+
     /**
      * Converted step to the seconds
      * @param \DateInterval $step

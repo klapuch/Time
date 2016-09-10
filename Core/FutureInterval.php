@@ -29,6 +29,10 @@ final class FutureInterval implements Interval {
         return $this->origin->step();
     }
 
+    public function iso(): string {
+        return $this->origin->iso();
+    }
+
     /**
      * Compare two datetimes
      * @param \DateTimeInterface $left

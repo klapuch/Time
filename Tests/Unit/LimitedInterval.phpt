@@ -43,6 +43,17 @@ final class LimitedInterval extends Tester\TestCase {
                 [0, 30]
             ))->step();
         }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
+        Assert::exception(function() {
+            (new Time\LimitedInterval(
+                new Time\FakeInterval(
+                    new \DateTime(),
+                    new \DateTime(),
+                    34
+                ),
+                [0, 30]
+            ))->iso();
+        }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
+
     }
 
     public function testUnderflowingLimit() {
@@ -76,12 +87,24 @@ final class LimitedInterval extends Tester\TestCase {
                 [10, 30]
             ))->step();
         }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
+        Assert::exception(function() {
+            (new Time\LimitedInterval(
+                new Time\FakeInterval(
+                    new \DateTime(),
+                    new \DateTime(),
+                    -2
+                ),
+                [10, 30]
+            ))->iso();
+        }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
+
     }
 
     public function testAllowedLimit() {
         $start = new \DateTime();
         $next = new \DateTime();
         $step = 20;
+        $iso = 'PT10M';
         Assert::same(
             $start,
             (new Time\LimitedInterval(
@@ -115,6 +138,19 @@ final class LimitedInterval extends Tester\TestCase {
                 [0, 22]
             ))->step()
         );
+        Assert::same(
+            $iso,
+            (new Time\LimitedInterval(
+                new Time\FakeInterval(
+                    $start,
+                    $next,
+                    $step,
+                    $iso
+                ),
+                [0, 22]
+            ))->iso()
+        );
+
     }
 
     public function testShuffledRangesWithCorrectReshuffling() {

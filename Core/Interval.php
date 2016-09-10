@@ -22,4 +22,10 @@ interface Interval {
      * @return int
      */
     public function step(): int;
+
+    /**
+     * Steps of the interval in ISO format
+     * @return string
+     */
+    public function iso(): string;
 }
