@@ -13,88 +13,96 @@ require __DIR__ . '/../bootstrap.php';
 
 final class LimitedInterval extends Tester\TestCase {
     public function testOversteppingLimit() {
-        Assert::exception(function() {
+        $limit = [
+            new Time\FakeInterval(null, null, 0),
+            new Time\FakeInterval(null, null, 30)
+        ];
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     31
                 ),
-                [0, 30]
+               $limit 
             ))->current();
         }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
-        Assert::exception(function() {
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     32
                 ),
-                [0, 30]
+                $limit
             ))->next();
         }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
-        Assert::exception(function() {
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     33
                 ),
-                [0, 30]
+                $limit
             ))->step();
         }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
-        Assert::exception(function() {
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     34
                 ),
-                [0, 30]
+                $limit
             ))->iso();
         }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
 
     }
 
     public function testUnderflowingLimit() {
-        Assert::exception(function() {
+        $limit = [
+            new Time\FakeInterval(null, null, 10),
+            new Time\FakeInterval(null, null, 30)
+        ];
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     9
                 ),
-                [10, 30]
+                $limit
             ))->current();
         }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
-        Assert::exception(function() {
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     0
                 ),
-                [10, 30]
+                $limit
             ))->next();
         }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
-        Assert::exception(function() {
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     -1
                 ),
-                [10, 30]
+                $limit
             ))->step();
         }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
-        Assert::exception(function() {
+        Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
                     -2
                 ),
-                [10, 30]
+                $limit
             ))->iso();
         }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
 
@@ -113,7 +121,10 @@ final class LimitedInterval extends Tester\TestCase {
                     $next,
                     $step
                 ),
-                [0, 20]
+                [
+                    new Time\FakeInterval(null, null, 0),
+                    new Time\FakeInterval(null, null, 20)
+                ]
             ))->current()
         );
         Assert::same(
@@ -124,7 +135,10 @@ final class LimitedInterval extends Tester\TestCase {
                     $next,
                     $step
                 ),
-                [0, 21]
+                [
+                    new Time\FakeInterval(null, null, 0),
+                    new Time\FakeInterval(null, null, 21)
+                ]
             ))->next()->current()
         );
         Assert::same(
@@ -135,7 +149,10 @@ final class LimitedInterval extends Tester\TestCase {
                     $next,
                     $step
                 ),
-                [0, 22]
+                [
+                    new Time\FakeInterval(null, null, 0),
+                    new Time\FakeInterval(null, null, 22)
+                ]
             ))->step()
         );
         Assert::same(
@@ -147,7 +164,10 @@ final class LimitedInterval extends Tester\TestCase {
                     $step,
                     $iso
                 ),
-                [0, 22]
+                [
+                    new Time\FakeInterval(null, null, 0),
+                    new Time\FakeInterval(null, null, 23)
+                ]
             ))->iso()
         );
 
@@ -161,7 +181,10 @@ final class LimitedInterval extends Tester\TestCase {
                     new \DateTime(),
                     30
                 ),
-                [40, 0]
+                [
+                    new Time\FakeInterval(null, null, 40),
+                    new Time\FakeInterval(null, null, 0)
+                ]
             ))->current();
         });
     }

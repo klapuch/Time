@@ -41,7 +41,7 @@ final class LimitedInterval implements Interval {
     }
 
     /**
-     * On allowed range call the event
+     * Call the given event on allowed range
      * @param \closure $event
      * @return int|DateTimeInterface
      * @throws \RuntimeException
@@ -110,9 +110,13 @@ final class LimitedInterval implements Interval {
      * @return array
      */
     private function orderedRange(): array {
+        $steps = [
+            $this->range[self::FROM]->step(),
+            $this->range[self::TO]->step()
+        ];
         return [
-            self::FROM => min($this->range),
-            self::TO =>max($this->range)
+            self::FROM => min($steps),
+            self::TO =>max($steps)
         ];
     }
 }
