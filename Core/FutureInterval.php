@@ -42,7 +42,7 @@ final class FutureInterval implements Interval {
     private function comparison(
         \DateTimeInterface $left,
         \DateTimeInterface $right
-    ) {
+    ): int {
         return $left <=> $right; 
     }
 }

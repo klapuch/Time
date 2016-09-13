@@ -92,7 +92,7 @@ final class DateTimeInterval extends Tester\TestCase {
                 ))->step();
             },
             \OutOfRangeException::class,
-            'Months or years can not be precisely transferred'
+            'Months and years can not be precisely converted'
         );
     }
 }
