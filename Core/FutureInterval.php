@@ -33,6 +33,10 @@ final class FutureInterval implements Interval {
         return $this->origin->iso();
     }
 
+    public function __toString(): string {
+        return (string)$this->origin;
+    }
+
     /**
      * Compare two datetimes
      * @param \DateTimeInterface $left

@@ -40,6 +40,10 @@ final class LimitedInterval implements Interval {
         });
     }
 
+    public function __toString(): string {
+        return (string)$this->origin;
+    }
+
     /**
      * Call the given event on allowed range
      * @param \closure $event
@@ -88,7 +92,7 @@ final class LimitedInterval implements Interval {
      * @return int
      */
     private function limit(int $position): int {
-        return $this->orderedRange()[$position];
+        return $this->orderedRange()[$position]->step();
     }
 
     /**
@@ -97,8 +101,12 @@ final class LimitedInterval implements Interval {
      */
     private function readableRange(): string {
         return sprintf(
-            'from %d to %d',
-            ...$this->orderedRange()
+            'from %s to %s',
+            ...array_map(
+                function(Interval $position) {
+                    return $position->iso();
+                }, $this->orderedRange()
+            )
         );
     }
 
@@ -110,13 +118,13 @@ final class LimitedInterval implements Interval {
      * @return array
      */
     private function orderedRange(): array {
-        $steps = [
-            $this->range[self::FROM]->step(),
-            $this->range[self::TO]->step()
+        $positions = [
+            $this->range[self::FROM]->step() => $this->range[self::FROM],
+            $this->range[self::TO]->step() => $this->range[self::TO]
         ];
         return [
-            self::FROM => min($steps),
-            self::TO =>max($steps)
+            self::FROM => $positions[min(array_keys($positions))],
+            self::TO => $positions[max(array_keys($positions))],
         ];
     }
 }

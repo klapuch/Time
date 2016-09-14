@@ -14,8 +14,8 @@ require __DIR__ . '/../bootstrap.php';
 final class LimitedInterval extends Tester\TestCase {
     public function testOversteppingLimit() {
         $limit = [
-            new Time\FakeInterval(null, null, 0),
-            new Time\FakeInterval(null, null, 30)
+            new Time\FakeInterval(null, null, 0, '0'),
+            new Time\FakeInterval(null, null, 30, '30')
         ];
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
@@ -62,8 +62,8 @@ final class LimitedInterval extends Tester\TestCase {
 
     public function testUnderflowingLimit() {
         $limit = [
-            new Time\FakeInterval(null, null, 10),
-            new Time\FakeInterval(null, null, 30)
+            new Time\FakeInterval(null, null, 10, '10'),
+            new Time\FakeInterval(null, null, 30, '30')
         ];
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(

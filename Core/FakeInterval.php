@@ -15,7 +15,8 @@ final class FakeInterval implements Interval {
         \DateTimeInterface $current = null,
         \DateTimeInterface $next = null,
         int $step = null,
-        string $iso = null
+        string $iso = null,
+        string $string = null
     ) {
         $this->current = $current;
         $this->next = $next;
@@ -42,5 +43,9 @@ final class FakeInterval implements Interval {
 
     public function iso(): string {
         return $this->iso;
+    }
+
+    public function __toString(): string {
+        return $this->string;
     }
 }

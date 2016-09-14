@@ -28,4 +28,10 @@ interface Interval {
      * @return string
      */
     public function iso(): string;
+
+    /**
+     * Print itself
+     * @return string
+     */
+    public function __toString(): string;
 }
