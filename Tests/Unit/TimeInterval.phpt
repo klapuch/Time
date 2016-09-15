@@ -40,7 +40,16 @@ final class TimeInterval extends Tester\TestCase {
                 new \DateInterval('PT2M')
             ))->iso()
         );
+    }
 
+    /**
+     * @throws \InvalidArgumentException For time intervals are allowed only seconds, minutes and hours
+     */
+    public function testIsoInNonTimeUnit() {
+        (new Time\TimeInterval(
+            new \DateTimeImmutable('2000-01-01 01:01:01'),
+            new \DateInterval('P12D')
+        ))->iso();
     }
 
     protected function formats() {
@@ -71,60 +80,6 @@ final class TimeInterval extends Tester\TestCase {
                 new \DateTimeImmutable('2000-01-01 01:01:01'),
                 new \DateInterval($actual)
             )
-        );
-    }
-
-
-    protected function allowedSteps() {
-        $negativeInterval = new \DateInterval('PT4M');
-        $negativeInterval->invert = 1;
-        return [
-            [new \DateInterval('PT4M'), 240],
-            [new \DateInterval('PT4S'), 4],
-            [new \DateInterval('PT1H'), 3600],
-            [new \DateInterval('PT1H4M4S'), 3844], // 1 hour, 4 minutes, 4 seconds
-            [$negativeInterval, 240],
-            [new \DateInterval('PT0M'), 0],
-        ];
-    }
-
-    protected function notSupportedSteps() {
-        return [
-            [new \DateInterval('P1M')],
-            [new \DateInterval('P1Y')],
-            [new \DateInterval('P2D'), 86400 * 2],
-        ];
-    }
-
-    /**
-     * @dataProvider allowedSteps
-     */
-    public function testStepsConvertedToSeconds(
-        \DateInterval $actual,
-        int $expected
-    ) {
-        Assert::equal(
-            $expected,
-            (new Time\TimeInterval(
-                new \DateTimeImmutable('2000-01-01 01:01:01'),
-                $actual
-            ))->step()
-        );
-    }
-
-    /**
-     * @dataProvider notSupportedSteps
-     */
-    public function testNotSupportedSteps(\DateInterval $actual) {
-        Assert::exception(
-            function() use ($actual) {
-                (new Time\TimeInterval(
-                    new \DateTimeImmutable('2000-01-01 01:01:01'),
-                    $actual
-                ))->step();
-            },
-            \OutOfRangeException::class,
-            'For time intervals are allowed only seconds, minutes and hours'
         );
     }
 }

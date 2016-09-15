@@ -28,16 +28,8 @@ final class TimeInterval implements Interval {
         );
     }
 
-    public function step(): int {
-        if($this->convertable($this->step))
-            return $this->toSeconds($this->step);
-        throw new \OutOfRangeException(
-            'For time intervals are allowed only seconds, minutes and hours'
-        );
-    }
-
     public function iso(): string {
-        return sprintf('PT%dS', $this->step());
+        return sprintf('PT%dS', $this->toSeconds($this->step));
     }
 
     public function __toString(): string {
@@ -70,10 +62,15 @@ final class TimeInterval implements Interval {
     /**
      * Converted step to the seconds
      * @param \DateInterval $step
+     * @throws \InvalidArgumentException
      * @return int
      */
     private function toSeconds(\DateInterval $step): int {
-        return $step->h * 3600 + $step->i * 60 + $step->s;
+        if($this->convertable($step))
+            return $step->h * 3600 + $step->i * 60 + $step->s;
+        throw new \InvalidArgumentException(
+            'For time intervals are allowed only seconds, minutes and hours'
+        );
     }
 
     /**

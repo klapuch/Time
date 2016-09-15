@@ -25,10 +25,6 @@ final class FutureInterval implements Interval {
         throw new \OutOfRangeException('Next step must points to the future');
     }
 
-    public function step(): int {
-        return $this->origin->step();
-    }
-
     public function iso(): string {
         return $this->origin->iso();
     }

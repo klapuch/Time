@@ -48,14 +48,6 @@ final class FutureInterval extends Tester\TestCase {
         });
     }
 
-    public function testStepPointingToFuture() {
-        Assert::noError(function() {
-            (new Time\FutureInterval(
-                new Time\FakeInterval(null, null, 120)
-            ))->step();
-        });
-    }
-
     /**
      * @throws \OutOfRangeException Start interval must points to the future
      */

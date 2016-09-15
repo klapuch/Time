@@ -28,12 +28,6 @@ final class LimitedInterval implements Interval {
         });
     }
 
-    public function step(): int {
-        return $this->onAllowedRange(function() {
-            return $this->origin->step();
-        });
-    }
-
     public function iso(): string {
         return $this->onAllowedRange(function() {
             return $this->origin->iso();
@@ -75,7 +69,10 @@ final class LimitedInterval implements Interval {
      * @return bool
      */
     private function underflowed(): bool {
-        return $this->origin->step() < $this->limit(self::FROM);
+        return $this->comparison(
+            $this->origin,
+            $this->limit(self::FROM)
+        ) === -1;
     }
 
     /**
@@ -83,16 +80,32 @@ final class LimitedInterval implements Interval {
      * @return bool
      */
     private function overstepped(): bool {
-        return $this->origin->step() > $this->limit(self::TO);
+        return $this->comparison(
+            $this->origin,
+            $this->limit(self::TO)
+        ) === 1;
     }
 
     /**
-     * Limit by the given position
-     * @param int $position
+     * Compare two intervals
+     * @param Interval $left
+     * @param Interval $right
      * @return int
      */
-    private function limit(int $position): int {
-        return $this->orderedRange()[$position]->step();
+    private function comparison(Interval $left, Interval $right): int {
+        $now = new \DateTimeImmutable();
+        return $now->add(new \DateInterval($left->iso()))
+            <=> $now->add(new \DateInterval($right->iso()));
+    }
+
+
+    /**
+     * Part of the range by the given position
+     * @param int $position
+     * @return Interval
+     */
+    private function limit(int $position): Interval {
+        return $this->orderedRange()[$position];
     }
 
     /**
@@ -102,11 +115,7 @@ final class LimitedInterval implements Interval {
     private function readableRange(): string {
         return sprintf(
             'from %s to %s',
-            ...array_map(
-                function(Interval $position) {
-                    return $position->iso();
-                }, $this->orderedRange()
-            )
+            ...$this->orderedRange()
         );
     }
 
@@ -115,16 +124,25 @@ final class LimitedInterval implements Interval {
      * Ordered range in ascend direction
      * FROM will be always minimum
      * TO will be always maximum
-     * @return array
+     * @return Interval[]
      */
     private function orderedRange(): array {
-        $positions = [
-            $this->range[self::FROM]->step() => $this->range[self::FROM],
-            $this->range[self::TO]->step() => $this->range[self::TO]
-        ];
+        if($this->ordered())
+            return $this->range;
         return [
-            self::FROM => $positions[min(array_keys($positions))],
-            self::TO => $positions[max(array_keys($positions))],
+            self::FROM => $this->range[self::TO],
+            self::TO => $this->range[self::FROM],
         ];
+    }
+
+    /**
+     * Is the range properly ordered?
+     * @return bool
+     */
+    private function ordered(): bool {
+        return $this->comparison(
+            $this->range[self::FROM],
+            $this->range[self::TO]
+        ) === -1;
     }
 }

@@ -13,105 +13,87 @@ require __DIR__ . '/../bootstrap.php';
 
 final class LimitedInterval extends Tester\TestCase {
     public function testOversteppingLimit() {
+        $now = new \DateTimeImmutable();
         $limit = [
-            new Time\FakeInterval(null, null, 0, '0'),
-            new Time\FakeInterval(null, null, 30, '30')
+            new Time\FakeInterval($now, null, 'PT0M'),
+            new Time\FakeInterval($now, null, 'PT30M')
         ];
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
-                    31
+                    'PT31M'
                 ),
                $limit 
             ))->current();
-        }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
+        }, \OverflowException::class, 'The range limit from <<PT0M>> to <<PT30M>> has been overstepped');
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
-                    32
+                    'PT32M'
                 ),
                 $limit
             ))->next();
-        }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
+        }, \OverflowException::class, 'The range limit from <<PT0M>> to <<PT30M>> has been overstepped');
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
-                    33
-                ),
-                $limit
-            ))->step();
-        }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
-        Assert::exception(function() use ($limit) {
-            (new Time\LimitedInterval(
-                new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
-                    34
+                    'PT34M'
                 ),
                 $limit
             ))->iso();
-        }, \OverflowException::class, 'The range limit from 0 to 30 has been overstepped');
+        }, \OverflowException::class, 'The range limit from <<PT0M>> to <<PT30M>> has been overstepped');
 
     }
 
     public function testUnderflowingLimit() {
+        $now = new \DateTimeImmutable();
         $limit = [
-            new Time\FakeInterval(null, null, 10, '10'),
-            new Time\FakeInterval(null, null, 30, '30')
+            new Time\FakeInterval($now, null, 'PT10M'),
+            new Time\FakeInterval($now, null, 'PT30M')
         ];
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
-                    9
+                    'PT9M'
                 ),
                 $limit
             ))->current();
-        }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
+        }, \UnderflowException::class, 'The range limit from <<PT10M>> to <<PT30M>> has been underflowed');
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
-                    0
+                    'PT0M'
                 ),
                 $limit
             ))->next();
-        }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
+        }, \UnderflowException::class, 'The range limit from <<PT10M>> to <<PT30M>> has been underflowed');
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
-                    -1
-                ),
-                $limit
-            ))->step();
-        }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
-        Assert::exception(function() use ($limit) {
-            (new Time\LimitedInterval(
-                new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
-                    -2
+                    'PT1M'
                 ),
                 $limit
             ))->iso();
-        }, \UnderflowException::class, 'The range limit from 10 to 30 has been underflowed');
+        }, \UnderflowException::class, 'The range limit from <<PT10M>> to <<PT30M>> has been underflowed');
 
     }
 
     public function testAllowedLimit() {
+        $now = new \DateTimeImmutable();
         $start = new \DateTime();
         $next = new \DateTime();
-        $step = 20;
         $iso = 'PT10M';
         Assert::same(
             $start,
@@ -119,11 +101,11 @@ final class LimitedInterval extends Tester\TestCase {
                 new Time\FakeInterval(
                     $start,
                     $next,
-                    $step
+                    $iso
                 ),
                 [
-                    new Time\FakeInterval(null, null, 0),
-                    new Time\FakeInterval(null, null, 20)
+                    new Time\FakeInterval($now, null, 'PT0M'),
+                    new Time\FakeInterval($now, null, 'PT20M')
                 ]
             ))->current()
         );
@@ -133,27 +115,13 @@ final class LimitedInterval extends Tester\TestCase {
                 new Time\FakeInterval(
                     $start,
                     $next,
-                    $step
+                    $iso
                 ),
                 [
-                    new Time\FakeInterval(null, null, 0),
-                    new Time\FakeInterval(null, null, 21)
+                    new Time\FakeInterval($now, null, 'PT0M'),
+                    new Time\FakeInterval($now, null, 'PT21M')
                 ]
             ))->next()->current()
-        );
-        Assert::same(
-            $step,
-            (new Time\LimitedInterval(
-                new Time\FakeInterval(
-                    $start,
-                    $next,
-                    $step
-                ),
-                [
-                    new Time\FakeInterval(null, null, 0),
-                    new Time\FakeInterval(null, null, 22)
-                ]
-            ))->step()
         );
         Assert::same(
             $iso,
@@ -161,12 +129,11 @@ final class LimitedInterval extends Tester\TestCase {
                 new Time\FakeInterval(
                     $start,
                     $next,
-                    $step,
                     $iso
                 ),
                 [
-                    new Time\FakeInterval(null, null, 0),
-                    new Time\FakeInterval(null, null, 23)
+                    new Time\FakeInterval($now, null, 'PT0M'),
+                    new Time\FakeInterval($now, null, 'PT23M')
                 ]
             ))->iso()
         );
@@ -174,16 +141,17 @@ final class LimitedInterval extends Tester\TestCase {
     }
 
     public function testShuffledRangesWithCorrectReshuffling() {
-        Assert::noError(function() {
+        $now = new \DateTimeImmutable();
+        Assert::noError(function() use($now) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
                     new \DateTime(),
                     new \DateTime(),
-                    30
+                    'PT30M'
                 ),
                 [
-                    new Time\FakeInterval(null, null, 40),
-                    new Time\FakeInterval(null, null, 0)
+                    new Time\FakeInterval($now, null, 'PT40M'),
+                    new Time\FakeInterval($now, null, 'PT0M')
                 ]
             ))->current();
         });

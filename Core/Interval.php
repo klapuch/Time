@@ -17,14 +17,7 @@ interface Interval {
     public function next(): self;
 
     /**
-     * How many units have a one step for the next interval?
-     * @throws \OutOfRangeException
-     * @return int
-     */
-    public function step(): int;
-
-    /**
-     * Steps of the interval in ISO format
+     * The interval in ISO format
      * @return string
      */
     public function iso(): string;
