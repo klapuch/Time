@@ -27,7 +27,7 @@ final class FutureInterval extends Tester\TestCase {
     /**
      * @throws \OutOfRangeException Next step must points to the future
      */
-    public function testNextPointingNow() {
+    public function testNextPointingToNow() {
         $future = (new \DateTime())->add(new \DateInterval('P10D'));
         (new Time\FutureInterval(
             new Time\FakeInterval(
@@ -56,16 +56,6 @@ final class FutureInterval extends Tester\TestCase {
             new Time\FakeInterval(new \DateTime('2000-01-01 01:01:01'))
         ))->current();
     }
-
-    /**
-     * @throws \OutOfRangeException Start interval must points to the future
-     */
-    public function testCurrentPointingToNow() {
-        (new Time\FutureInterval(
-            new Time\FakeInterval(new \DateTime())
-        ))->current();
-    }
-
 
     public function testCurrentPointingToFuture() {
         Assert::noError(function() {
