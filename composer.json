@@ -1,22 +1,27 @@
 {
-    "name": "klapuch/time",
-    "description": "time, date, datetime, interval",
-    "type": "library",
-    "require-dev": {
-        "nette/tester": "^1.7"
-    },
-    "authors": [
-        {
-            "name": "Dominik Klapuch",
-            "email": "klapuchdominik@gmail.com"
-        }
-    ],
-    "require": {
-      "php": ">=7.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Klapuch\\Time\\": "Core/"
-        }
-    }
+  "name": "klapuch/time",
+  "description": "time, date, datetime, interval",
+  "type": "library",
+  "homepage": "https://github.com/klapuch/Time",
+  "authors": [
+	{
+	  "name": "Dominik Klapuch",
+	  "email": "klapuchdominik@gmail.com",
+	  "homepage": "https://www.github.com/klapuch",
+	  "role": "Developer"
+	}
+  ],
+  "require": {
+	"php": ">=7.0"
+  },
+  "require-dev": {
+	"nette/tester": "^1.7"
+  },
+  "autoload": {
+	"psr-4": {
+	  "Klapuch\\Time\\": [
+		"Core/"
+	  ]
+	}
+  }
 }
