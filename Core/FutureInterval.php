@@ -13,7 +13,7 @@ final class FutureInterval implements Interval {
 		$this->origin = $origin;
 	}
 
-	public function current(): \DateTimeInterface {
+	public function current(): \DateTimeImmutable {
 		if($this->comparison($this->origin->current(), new \DateTime()) === 1)
 			return $this->origin->current();
 		throw new \OutOfRangeException(

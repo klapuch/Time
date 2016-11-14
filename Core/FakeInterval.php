@@ -11,8 +11,8 @@ final class FakeInterval implements Interval {
 	private $iso;
 
 	public function __construct(
-		\DateTimeInterface $current = null,
-		\DateTimeInterface $next = null,
+		\DateTimeImmutable $current = null,
+		\DateTimeImmutable $next = null,
 		string $iso = null
 	) {
 		$this->current = $current;
@@ -20,7 +20,7 @@ final class FakeInterval implements Interval {
 		$this->iso = $iso;
 	}
 
-	public function current(): \DateTimeInterface {
+	public function current(): \DateTimeImmutable {
 		return $this->current;
 	}
 

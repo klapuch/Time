@@ -5,9 +5,9 @@ namespace Klapuch\Time;
 interface Interval {
 	/**
 	 * Current step in the interval
-	 * @return \DateTimeInterface
+	 * @return \DateTimeImmutable
 	 */
-	public function current(): \DateTimeInterface;
+	public function current(): \DateTimeImmutable;
 
 	/**
 	 * Next step in the interval

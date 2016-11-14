@@ -21,8 +21,8 @@ final class LimitedInterval extends Tester\TestCase {
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
+                    new \DateTimeImmutable(),
+                    new \DateTimeImmutable(),
                     'PT31M'
                 ),
                $limit 
@@ -31,8 +31,8 @@ final class LimitedInterval extends Tester\TestCase {
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
+                    new \DateTimeImmutable(),
+                    new \DateTimeImmutable(),
                     'PT32M'
                 ),
                 $limit
@@ -41,8 +41,8 @@ final class LimitedInterval extends Tester\TestCase {
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
+                    new \DateTimeImmutable(),
+                    new \DateTimeImmutable(),
                     'PT34M'
                 ),
                 $limit
@@ -60,8 +60,8 @@ final class LimitedInterval extends Tester\TestCase {
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
+                    new \DateTimeImmutable(),
+                    new \DateTimeImmutable(),
                     'PT9M'
                 ),
                 $limit
@@ -70,8 +70,8 @@ final class LimitedInterval extends Tester\TestCase {
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
+                    new \DateTimeImmutable(),
+                    new \DateTimeImmutable(),
                     'PT0M'
                 ),
                 $limit
@@ -80,8 +80,8 @@ final class LimitedInterval extends Tester\TestCase {
         Assert::exception(function() use ($limit) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
+                    new \DateTimeImmutable(),
+                    new \DateTimeImmutable(),
                     'PT1M'
                 ),
                 $limit
@@ -92,8 +92,8 @@ final class LimitedInterval extends Tester\TestCase {
 
     public function testAllowedLimit() {
         $now = new \DateTimeImmutable();
-        $start = new \DateTime();
-        $next = new \DateTime();
+        $start = new \DateTimeImmutable();
+        $next = new \DateTimeImmutable();
         $iso = 'PT10M';
         Assert::same(
             $start,
@@ -145,8 +145,8 @@ final class LimitedInterval extends Tester\TestCase {
         Assert::noError(function() use($now) {
             (new Time\LimitedInterval(
                 new Time\FakeInterval(
-                    new \DateTime(),
-                    new \DateTime(),
+                    new \DateTimeImmutable(),
+                    new \DateTimeImmutable(),
                     'PT30M'
                 ),
                 [

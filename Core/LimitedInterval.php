@@ -16,7 +16,7 @@ final class LimitedInterval implements Interval {
 		$this->range = $range;
 	}
 
-	public function current(): \DateTimeInterface {
+	public function current(): \DateTimeImmutable {
 		return $this->onAllowedRange(
 			function() {
 				return $this->origin->current();
@@ -47,7 +47,7 @@ final class LimitedInterval implements Interval {
 	/**
 	 * Call the given event on allowed range
 	 * @param \Closure $event
-	 * @return Interval|\DateTimeInterface|string
+	 * @return Interval|\DateTimeImmutable|string
 	 * @throws \RuntimeException
 	 */
 	private function onAllowedRange(\Closure $event) {

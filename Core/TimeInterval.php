@@ -10,14 +10,14 @@ final class TimeInterval implements Interval {
 	private $step;
 
 	public function __construct(
-		\DateTimeInterface $current,
+		\DateTimeImmutable $current,
 		\DateInterval $step
 	) {
 		$this->current = $current;
 		$this->step = $step;
 	}
 
-	public function current(): \DateTimeInterface {
+	public function current(): \DateTimeImmutable {
 		return $this->current;
 	}
 

@@ -18,7 +18,7 @@ final class FutureInterval extends Tester\TestCase {
     public function testNextPointingToPast() {
         (new Time\FutureInterval(
             new Time\FakeInterval(
-                (new \DateTime())->add(new \DateInterval('P10D')),
+                (new \DateTimeImmutable())->add(new \DateInterval('P10D')),
                 new \DateTimeImmutable('1900-01-01 01:01:01')
             )
         ))->next();
@@ -28,7 +28,7 @@ final class FutureInterval extends Tester\TestCase {
      * @throws \OutOfRangeException Next step must points to the future
      */
     public function testNextPointingToNow() {
-        $future = (new \DateTime())->add(new \DateInterval('P10D'));
+        $future = (new \DateTimeImmutable())->add(new \DateInterval('P10D'));
         (new Time\FutureInterval(
             new Time\FakeInterval(
                 $future,
@@ -41,8 +41,8 @@ final class FutureInterval extends Tester\TestCase {
         Assert::noError(function() {
             (new Time\FutureInterval(
                 new Time\FakeInterval(
-                    (new \DateTime())->add(new \DateInterval('P5D')),
-                    (new \DateTime())->add(new \DateInterval('P10D'))
+                    (new \DateTimeImmutable())->add(new \DateInterval('P5D')),
+                    (new \DateTimeImmutable())->add(new \DateInterval('P10D'))
                 )
             ))->next();
         });
@@ -53,7 +53,7 @@ final class FutureInterval extends Tester\TestCase {
      */
     public function testCurrentPointingToPast() {
         (new Time\FutureInterval(
-            new Time\FakeInterval(new \DateTime('2000-01-01 01:01:01'))
+            new Time\FakeInterval(new \DateTimeImmutable('2000-01-01 01:01:01'))
         ))->current();
     }
 
@@ -61,7 +61,7 @@ final class FutureInterval extends Tester\TestCase {
         Assert::noError(function() {
             (new Time\FutureInterval(
                 new Time\FakeInterval(
-                    (new \DateTime())->add(new \DateInterval('P10D'))
+                    (new \DateTimeImmutable())->add(new \DateInterval('P10D'))
                 )
             ))->current();
         });
