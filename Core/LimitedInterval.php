@@ -41,10 +41,10 @@ final class LimitedInterval implements Interval {
     /**
      * Call the given event on allowed range
      * @param \closure $event
-     * @return int|DateTimeInterface
+     * @return int|\DateTimeInterface
      * @throws \RuntimeException
      */ 
-    private function onAllowedRange(\closure $event) {
+    private function onAllowedRange(\Closure $event) {
         if($this->underflowed()) {
             throw new \UnderflowException(
                 sprintf(
@@ -127,22 +127,9 @@ final class LimitedInterval implements Interval {
      * @return Interval[]
      */
     private function orderedRange(): array {
-        if($this->ordered())
-            return $this->range;
-        return [
-            self::FROM => $this->range[self::TO],
-            self::TO => $this->range[self::FROM],
-        ];
-    }
-
-    /**
-     * Is the range properly ordered?
-     * @return bool
-     */
-    private function ordered(): bool {
-        return $this->comparison(
-            $this->range[self::FROM],
-            $this->range[self::TO]
-        ) === -1;
+		return [
+			self::FROM => min($this->range),
+			self::TO => max($this->range),
+		];
     }
 }

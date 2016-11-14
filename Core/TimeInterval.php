@@ -66,7 +66,7 @@ final class TimeInterval implements Interval {
      * @return int
      */
     private function toSeconds(\DateInterval $step): int {
-        if($this->convertable($step))
+        if($this->convertible($step))
             return $step->h * 3600 + $step->i * 60 + $step->s;
         throw new \InvalidArgumentException(
             'For time intervals are allowed only seconds, minutes and hours'
@@ -78,7 +78,7 @@ final class TimeInterval implements Interval {
      * @param \DateInterval $step
      * @return bool
      */
-    private function convertable(\DateInterval $step): bool {
+    private function convertible(\DateInterval $step): bool {
         return $step->m === 0 && $step->y === 0 && $step->d === 0;
     }
 }
