@@ -47,7 +47,7 @@ final class LimitedInterval implements Interval {
 	/**
 	 * Call the given event on allowed range
 	 * @param \Closure $event
-	 * @return Interval|\DateTimeInterface
+	 * @return Interval|\DateTimeInterface|string
 	 * @throws \RuntimeException
 	 */
 	private function onAllowedRange(\Closure $event) {
