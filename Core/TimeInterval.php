@@ -6,6 +6,7 @@ namespace Klapuch\Time;
  * Interval representing time (hours, minutes, seconds)
  */
 final class TimeInterval implements Interval {
+	const DAY = 86400; // Day in seconds
 	private $current;
 	private $step;
 
@@ -33,30 +34,41 @@ final class TimeInterval implements Interval {
 	}
 
 	public function __toString(): string {
-		$formats = [
-			's' => 'second',
-			'i' => 'minute',
-			'h' => 'hour',
-		];
-		return $this->step->format(
-			implode(
-				', ',
-				array_reduce(
-					array_keys($formats),
-					function($merged, string $format) use ($formats) {
-						if($this->step->{$format} !== 0)
-							$merged[] = "%{$format} " . $this->withPlural(
-									$this->step->{$format},
-									$formats[$format]
-								);
-						return $merged;
-					}
+		if($this->toSeconds($this->step) >= self::DAY)
+			return 'UNKNOWN';
+		return implode(
+			', ',
+			array_map(
+				function(string $time): string {
+					list($number, $unit) = explode(' ', $time);
+					return sprintf(
+						'%01d %s',
+						$number,
+						$this->toPlural((int)$number, $unit)
+					);
+				},
+				explode(
+					',',
+					strtr(
+						trim(
+							preg_replace(
+								'~00\s.,?~',
+								'',
+								gmdate(
+									'H \h,i \m,s \s',
+									$this->toSeconds($this->step)
+								)
+							),
+							','
+						),
+						['h' => 'hour', 'm' => 'minute', 's' => 'second']
+					)
 				)
 			)
 		);
 	}
 
-	private function withPlural(int $count, string $word): string {
+	private function toPlural(int $count, string $word): string {
 		return $count > 1 ? $word . 's' : $word;
 	}
 
