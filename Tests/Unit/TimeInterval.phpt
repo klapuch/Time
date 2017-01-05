@@ -62,6 +62,8 @@ final class TimeInterval extends Tester\TestCase {
 			['PT50M', '50 minutes'],
 			['PT50S', '50 seconds'],
 			['PT50H', 'UNKNOWN'], // not convertible, only time units
+			['PT25H', 'UNKNOWN'], // not convertible, only time units
+			['PT24H', 'UNKNOWN'], // not convertible, only time units
 			['PT120S', '2 minutes'],
 			['PT60S', '1 minute'],
 			['PT121S', '2 minutes, 1 second'],
