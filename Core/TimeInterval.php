@@ -47,25 +47,30 @@ final class TimeInterval implements Interval {
 						$this->toPlural((int)$number, $unit)
 					);
 				},
-				explode(
-					',',
-					strtr(
-						trim(
-							preg_replace(
-								'~00\s.,?~',
-								'',
-								gmdate(
-									'H \h,i \m,s \s',
-									$this->toSeconds($this->step)
-								)
-							),
-							','
-						),
-						['h' => 'hour', 'm' => 'minute', 's' => 'second']
-					)
-				)
+				explode(',', $this->formattedSpread($this->step))
 			)
 		);
+	}
+
+	/**
+	 * Formatted spread
+	 * @param \DateInterval $step
+	 * @return string
+	 */
+	private function formattedSpread(\DateInterval $step): string {
+		return strtr(
+			trim(preg_replace('~00\s.,?~', '', $this->spread($step)), ','),
+			['h' => 'hour', 'm' => 'minute', 's' => 'second']
+		);
+	}
+
+	/**
+	 * Step spread to time (hours, minutes, seconds)
+	 * @param \DateInterval $step
+	 * @return string
+	 */
+	private function spread(\DateInterval $step): string {
+		return gmdate('H \h,i \m,s \s', $this->toSeconds($this->step));
 	}
 
 	private function toPlural(int $count, string $word): string {
