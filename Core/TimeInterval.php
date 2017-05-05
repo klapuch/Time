@@ -6,7 +6,7 @@ namespace Klapuch\Time;
  * Interval representing time (hours, minutes, seconds)
  */
 final class TimeInterval implements Interval {
-	const DAY = 86400; // Day in seconds
+	private const DAY = 86400; // Day in seconds
 	private $current;
 	private $step;
 
@@ -34,7 +34,7 @@ final class TimeInterval implements Interval {
 	}
 
 	public function __toString(): string {
-		if($this->toSeconds($this->step) >= self::DAY)
+		if ($this->toSeconds($this->step) >= self::DAY)
 			return 'UNKNOWN';
 		return implode(
 			', ',
@@ -44,7 +44,7 @@ final class TimeInterval implements Interval {
 					return sprintf(
 						'%01d %s',
 						$number,
-						$this->toPlural((int)$number, $unit)
+						$this->toPlural((int) $number, $unit)
 					);
 				},
 				explode(',', $this->formattedSpread($this->step))
@@ -84,7 +84,7 @@ final class TimeInterval implements Interval {
 	 * @return int
 	 */
 	private function toSeconds(\DateInterval $step): int {
-		if($this->convertible($step))
+		if ($this->convertible($step))
 			return $step->h * 3600 + $step->i * 60 + $step->s;
 		throw new \InvalidArgumentException(
 			'For time intervals are allowed only seconds, minutes and hours'

@@ -1,7 +1,8 @@
 <?php
+declare(strict_types = 1);
 /**
  * @testCase
- * @phpVersion > 7.0.0
+ * @phpVersion > 7.1
  */
 namespace Klapuch\Time\Unit;
 
@@ -78,7 +79,7 @@ final class TimeInterval extends Tester\TestCase {
 	public function testPrettyFormat($actual, $expected) {
 		Assert::equal(
 			$expected,
-			(string)new Time\TimeInterval(
+			(string) new Time\TimeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
 				new \DateInterval($actual)
 			)

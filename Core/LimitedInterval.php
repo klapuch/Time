@@ -6,8 +6,8 @@ namespace Klapuch\Time;
  * Limited interval by the given range
  */
 final class LimitedInterval implements Interval {
-	const FROM = 0;
-	const TO = 1;
+	private const FROM = 0,
+		TO = 1;
 	private $origin;
 	private $range;
 
@@ -41,24 +41,24 @@ final class LimitedInterval implements Interval {
 	}
 
 	public function __toString(): string {
-		return (string)$this->origin;
+		return (string) $this->origin;
 	}
 
 	/**
 	 * Call the given event on allowed range
 	 * @param \Closure $event
-	 * @return Interval|\DateTimeImmutable|string
+	 * @return mixed
 	 * @throws \RuntimeException
 	 */
 	private function onAllowedRange(\Closure $event) {
-		if($this->underflowed()) {
+		if ($this->underflowed()) {
 			throw new \UnderflowException(
 				sprintf(
 					'The range limit %s has been underflowed',
 					$this->readableRange()
 				)
 			);
-		} elseif($this->overstepped()) {
+		} elseif ($this->overstepped()) {
 			throw new \OverflowException(
 				sprintf(
 					'The range limit %s has been overstepped',
@@ -93,8 +93,8 @@ final class LimitedInterval implements Interval {
 
 	/**
 	 * Compare two intervals
-	 * @param Interval $left
-	 * @param Interval $right
+	 * @param \Klapuch\Time\Interval $left
+	 * @param \Klapuch\Time\Interval $right
 	 * @return int
 	 */
 	private function comparison(Interval $left, Interval $right): int {
@@ -106,7 +106,7 @@ final class LimitedInterval implements Interval {
 	/**
 	 * Part of the range by the given position
 	 * @param int $position
-	 * @return Interval
+	 * @return \Klapuch\Time\Interval
 	 */
 	private function limit(int $position): Interval {
 		return $this->orderedRange()[$position];
@@ -117,17 +117,15 @@ final class LimitedInterval implements Interval {
 	 * @return string
 	 */
 	private function readableRange(): string {
-		return sprintf(
-			'from %s to %s',
-			...$this->orderedRange()
-		);
+		[$from, $to] = $this->orderedRange();
+		return sprintf('from %s to %s', $from, $to);
 	}
 
 	/**
 	 * Ordered range in ascend direction
 	 * FROM will be always minimum
 	 * TO will be always maximum
-	 * @return Interval[]
+	 * @return \Klapuch\Time\Interval[]
 	 */
 	private function orderedRange(): array {
 		return [

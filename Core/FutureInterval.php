@@ -14,7 +14,7 @@ final class FutureInterval implements Interval {
 	}
 
 	public function current(): \DateTimeImmutable {
-		if($this->comparison($this->origin->current(), new \DateTime()) === 1)
+		if ($this->comparison($this->origin->current(), new \DateTime()) === 1)
 			return $this->origin->current();
 		throw new \OutOfRangeException(
 			'Start interval must points to the future'
@@ -22,7 +22,7 @@ final class FutureInterval implements Interval {
 	}
 
 	public function next(): Interval {
-		if($this->comparison($this->origin->next()->current(), $this->current()) === 1)
+		if ($this->comparison($this->origin->next()->current(), $this->current()) === 1)
 			return $this->origin->next();
 		throw new \OutOfRangeException('Next step must points to the future');
 	}
@@ -32,7 +32,7 @@ final class FutureInterval implements Interval {
 	}
 
 	public function __toString(): string {
-		return (string)$this->origin;
+		return (string) $this->origin;
 	}
 
 	/**
