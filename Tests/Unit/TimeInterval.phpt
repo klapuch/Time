@@ -33,12 +33,15 @@ final class TimeInterval extends Tester\TestCase {
 		);
 	}
 
-	public function testIsoInSeconds() {
+	/**
+	 * @dataProvider isoSeconds
+	 */
+	public function testIsoInSeconds(string $iso, string $seconds) {
 		Assert::equal(
-			'PT120S',
+			$seconds,
 			(new Time\TimeInterval(
 				new \DateTimeImmutable('2000-01-01 01:01:01'),
-				new \DateInterval('PT2M')
+				new \DateInterval($iso)
 			))->iso()
 		);
 	}
@@ -53,7 +56,15 @@ final class TimeInterval extends Tester\TestCase {
 		))->iso();
 	}
 
-	protected function formats() {
+	protected function isoSeconds() {
+		return [
+			// ISO => seconds
+			['PT2M', 'PT120S'],
+			['PT1M40S', 'PT100S'],
+		];
+	}
+
+	protected function singleFormats() {
 		// actual, expected
 		return [
 			['PT2M', '2 minutes'],
@@ -73,10 +84,32 @@ final class TimeInterval extends Tester\TestCase {
 		];
 	}
 
+	protected function multipleFormats() {
+		// actual, expected
+		return [
+			['PT1M1S', '1 minute, 1 second'],
+			['PT2M3S', '2 minutes, 3 seconds'],
+			['PT1440M3S', 'UNKNOWN'], // not convertible, only time units
+		];
+	}
+
 	/**
-	 * @dataProvider formats
+	 * @dataProvider singleFormats
 	 */
-	public function testPrettyFormat($actual, $expected) {
+	public function testPrettifiedFormats($actual, $expected) {
+		Assert::equal(
+			$expected,
+			(string) new Time\TimeInterval(
+				new \DateTimeImmutable('2000-01-01 01:01:01'),
+				new \DateInterval($actual)
+			)
+		);
+	}
+
+	/**
+	 * @dataProvider multipleFormats
+	 */
+	public function testPrettifiedMultipleFormats($actual, $expected) {
 		Assert::equal(
 			$expected,
 			(string) new Time\TimeInterval(
