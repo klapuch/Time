@@ -70,7 +70,7 @@ final class TimeInterval implements Interval {
 	 * @return string
 	 */
 	private function spread(\DateInterval $step): string {
-		return gmdate('H \h,i \m,s \s', $this->toSeconds($this->step));
+		return gmdate('H \h,i \m,s \s', $this->toSeconds($step));
 	}
 
 	private function toPlural(int $count, string $word): string {
